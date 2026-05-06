@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sniper Hacker Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .digit { font-size: 5rem; line-height: 1; }
+        .live-dot { animation: pulse 1.5s infinite; }
+        .confidence-bar { height: 8px; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 9999px; }
+        .sniper-red { color: #f87171; }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-72 bg-gray-900 border-r border-gray-800 flex flex-col">
+            <div class="p-6 border-b border-gray-800">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-crosshairs text-4xl sniper-red"></i>
+                    <div>
+                        <h1 class="text-3xl font-bold tracking-tighter">SNIPER</h1>
+                        <p class="text-red-400 text-sm -mt-1">HACKER TOOL</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4">
+                <div class="text-xs uppercase tracking-widest text-gray-500 mb-3 px-3">ALL VOLATILITIES</div>
+                <div id="market-list" class="space-y-1 max-h-[calc(100vh-220px)] overflow-auto"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <div class="bg-gray-900 border-b border-gray-800 px-8 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-red-600 rounded-2xl flex items-center justify-center text-2xl font-bold">S</div>
+                        <div>
+                            <div class="font-bold text-2xl" id="market-name">Volatility 75 Index</div>
+                            <div class="flex items-center gap-2 text-emerald-400 text-sm">
+                                <span class="w-3 h-3 bg-emerald-400 rounded-full live-dot"></span>
+                                LIVE • SNIPING
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="font-mono text-5xl font-bold tabular-nums text-white" id="current-price">12345.67</div>
+                    <div id="last-digit" class="digit font-black sniper-red">7</div>
+                </div>
+                
+                <div class="flex items-center gap-10 text-sm">
+                    <div>
+                        <div class="text-gray-400 text-xs">CURRENT RUN</div>
+                        <div id="current-run" class="text-3xl font-bold text-sky-400">12</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-400 text-xs">NEXT TICK</div>
+                        <div id="countdown" class="font-mono text-2xl font-bold">0.9s</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 p-8 overflow-auto">
+                <div class="grid grid-cols-3 gap-6">
+
+                    <!-- MATCHES -->
+                    <div class="bg-gray-900 rounded-3xl p-7 border border-gray-800">
+                        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <i class="fa-solid fa-equals text-rose-400"></i>
+                            MATCHES
+                        </h2>
+                        
+                        <div class="text-center mb-8">
+                            <div class="text-gray-400 text-sm mb-1">ENTRY POINT</div>
+                            <div id="match-digit" class="text-8xl font-black text-rose-400">5</div>
+                        </div>
+                        
+                        <div class="bg-gray-950 rounded-2xl p-6 space-y-5">
+                            <div>
+                                <div class="flex justify-between mb-2 text-sm">
+                                    <span class="text-gray-400">Confidence</span>
+                                    <span id="match-confidence" class="font-bold text-emerald-400">84%</span>
+                                </div>
+                                <div class="bg-gray-800 h-2 rounded-full">
+                                    <div id="match-conf-bar" class="confidence-bar w-[84%]"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Recommended Trades</span>
+                                <span id="match-trades" class="font-mono font-bold">4 - 7</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="placeBet('match')" 
+                                class="mt-8 w-full py-5 bg-rose-600 hover:bg-rose-500 rounded-2xl text-lg font-bold transition">
+                            SNIPE MATCH
+                        </button>
+                    </div>
+
+                    <!-- EVEN / ODD -->
+                    <div class="bg-gray-900 rounded-3xl p-7 border border-gray-800">
+                        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <i class="fa-solid fa-parity text-violet-400"></i>
+                            EVEN / ODD
+                        </h2>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div onclick="selectEO('even')" id="even-card"
+                                 class="rounded-3xl p-8 text-center cursor-pointer border-2 border-violet-500 bg-gradient-to-br from-violet-950">
+                                <div class="text-4xl font-bold">EVEN</div>
+                                <div id="even-confidence" class="text-3xl font-bold text-emerald-400 mt-6">79%</div>
+                            </div>
+                            <div onclick="selectEO('odd')" id="odd-card"
+                                 class="rounded-3xl p-8 text-center cursor-pointer border border-gray-700 hover:border-gray-500">
+                                <div class="text-4xl font-bold">ODD</div>
+                                <div id="odd-confidence" class="text-3xl font-bold text-emerald-400 mt-6">68%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 bg-gray-950 rounded-2xl p-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Recommended Trades</span>
+                                <span id="eo-trades" class="font-mono font-bold">5 - 8</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="placeBet('evenodd')" 
+                                class="mt-8 w-full py-5 bg-violet-600 hover:bg-violet-500 rounded-2xl text-lg font-bold transition">
+                            SNIPE EVEN/ODD
+                        </button>
+                    </div>
+
+                    <!-- OVER / UNDER -->
+                    <div class="bg-gray-900 rounded-3xl p-7 border border-gray-800">
+                        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <i class="fa-solid fa-arrow-up-9-1 text-amber-400"></i>
+                            OVER / UNDER
+                        </h2>
+                        
+                        <div class="text-center mb-8">
+                            <div class="text-gray-400">ENTRY THRESHOLD</div>
+                            <div id="ou-value" class="text-7xl font-black text-amber-400">4.5</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div onclick="selectOU('over')" id="over-card"
+                                 class="rounded-3xl p-8 text-center cursor-pointer border-2 border-amber-500 bg-gradient-to-br from-amber-950">
+                                <div class="text-4xl font-bold">OVER</div>
+                                <div id="over-confidence" class="text-3xl font-bold text-emerald-400 mt-6">81%</div>
+                            </div>
+                            <div onclick="selectOU('under')" id="under-card"
+                                 class="rounded-3xl p-8 text-center cursor-pointer border border-gray-700 hover:border-gray-500">
+                                <div class="text-4xl font-bold">UNDER</div>
+                                <div id="under-confidence" class="text-3xl font-bold text-emerald-400 mt-6">62%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 bg-gray-950 rounded-2xl p-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Recommended Trades</span>
+                                <span id="ou-trades" class="font-mono font-bold">4 - 9</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="placeBet('overunder')" 
+                                class="mt-8 w-full py-5 bg-amber-600 hover:bg-amber-500 rounded-2xl text-lg font-bold transition">
+                            SNIPE OVER/UNDER
+                        </button>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div class="mt-10 bg-gray-900 rounded-3xl p-7 border border-gray-800">
+                    <h2 class="text-xl font-bold mb-6">DIGIT HISTORY & RUNS</h2>
+                    <div id="history" class="flex gap-3 flex-wrap"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="w-80 bg-gray-900 border-l border-gray-800 p-6 overflow-auto">
+            <h3 class="uppercase text-xs tracking-widest text-gray-500 mb-4">ALL VOLATILITIES</h3>
+            <div id="all-vols" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <script>
+        // All Deriv Volatilities
+        const volatilities = [
+            { id: "vol10", name: "Volatility 10", symbol: "R_10" },
+            { id: "vol10_1s", name: "Volatility 10 (1s)", symbol: "R_10_1S" },
+            { id: "vol25", name: "Volatility 25", symbol: "R_25" },
+            { id: "vol25_1s", name: "Volatility 25 (1s)", symbol: "R_25_1S" },
+            { id: "vol50", name: "Volatility 50", symbol: "R_50" },
+            { id: "vol75", name: "Volatility 75", symbol: "R_75" },
+            { id: "vol100", name: "Volatility 100", symbol: "R_100" },
+            { id: "vol100_1s", name: "Volatility 100 (1s)", symbol: "R_100_1S" }
+        ];
+
+        let currentMarket = volatilities[5]; // Default Volatility 75
+        let lastDigit = 7;
+        let history = [3,8,1,9,4,7,2,5,6,0,8,3,7,1,9,4,5,2,6,8,4,7,2];
+        let tickInterval = null;
+
+        function renderMarkets() {
+            const container = document.getElementById('market-list');
+            container.innerHTML = '';
+            
+            volatilities.forEach(m => {
+                const isActive = m.id === currentMarket.id;
+                const div = document.createElement('div');
+                div.className = `px-5 py-4 rounded-2xl cursor-pointer transition-all flex justify-between items-center ${isActive ? 'bg-red-900/70 border border-red-500' : 'hover:bg-gray-800'}`;
+                div.innerHTML = `
+                    <div>
+                        <div class="font-semibold">${m.name}</div>
+                        <div class="text-xs text-gray-500">${m.symbol}</div>
+                    </div>
+                    ${isActive ? '<i class="fa-solid fa-crosshairs text-red-400"></i>' : ''}
+                `;
+                div.onclick = () => switchMarket(m);
+                container.appendChild(div);
+            });
+        }
+
+        function renderAllVols() {
+            const container = document.getElementById('all-vols');
+            container.innerHTML = '';
+            volatilities.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'bg-gray-800 hover:bg-gray-700 p-4 rounded-2xl cursor-pointer transition';
+                div.innerHTML = `<div class="font-medium">\( {m.name}</div><div class="text-xs text-gray-500"> \){m.symbol}</div>`;
+                div.onclick = () => switchMarket(m);
+                container.appendChild(div);
+            });
+        }
+
+        function switchMarket(market) {
+            currentMarket = market;
+            document.getElementById('market-name').textContent = market.name;
+            renderMarkets();
+            simulateTick();
+        }
+
+        function updateHistory() {
+            const container = document.getElementById('history');
+            container.innerHTML = '';
+            history.forEach(d => {
+                const el = document.createElement('div');
+                el.className = `w-11 h-11 flex items-center justify-center text-xl font-bold rounded-2xl shadow-inner ${d % 2 === 0 ? 'bg-violet-600' : 'bg-rose-600'}`;
+                el.textContent = d;
+                container.appendChild(el);
+            });
+        }
+
+        function updatePredictions() {
+            lastDigit = Math.floor(Math.random() * 10);
+            document.getElementById('last-digit').textContent = lastDigit;
+            document.getElementById('current-price').textContent = (Math.random() * 100 + 12300).toFixed(2);
+
+            // Matches
+            const matchRec = (lastDigit + Math.floor(Math.random() * 4) + 1) % 10;
+            document.getElementById('match-digit').textContent = matchRec;
+            const matchConf = 76 + Math.floor(Math.random() * 19);
+            document.getElementById('match-confidence').textContent = matchConf + '%';
+            document.getElementById('match-conf-bar').style.width = matchConf + '%';
+            document.getElementById('match-trades').textContent = `${3 + Math.floor(Math.random()*3)} - ${6 + Math.floor(Math.random()*4)}`;
+
+            // Even / Odd
+            const evenLikely = Math.random() > 0.5;
+            document.getElementById('even-confidence').textContent = evenLikely ? "82%" : "65%";
+            document.getElementById('odd-confidence').textContent = evenLikely ? "61%" : "79%";
+            document.getElementById('eo-trades').textContent = "5 - 9";
+
+            // Over / Under
+            document.getElementById('ou-value').textContent = "4.5";
+            document.getElementById('over-confidence').textContent = "83%";
+            document.getElementById('under-confidence').textContent = "59%";
+            document.getElementById('ou-trades').textContent = "4 - 8";
+
+            history.unshift(lastDigit);
+            if (history.length > 25) history.pop();
+            updateHistory();
+        }
+
+        function simulateTick() {
+            updatePredictions();
+        }
+
+        function startSimulation() {
+            if (tickInterval) clearInterval(tickInterval);
+            tickInterval = setInterval(simulateTick, 1450);
+        }
+
+        function placeBet(type) {
+            const messages = {
+                match: "MATCH SNIPED",
+                evenodd: "EVEN/ODD SNIPED",
+                overunder: "OVER/UNDER SNIPED"
+            };
+            const notif = document.createElement('div');
+            notif.style.cssText = `position:fixed; bottom:40px; right:40px; background:#b91c1c; color:white; padding:18px 28px; border-radius:9999px; box-shadow:0 30px 60px -15px rgb(185 28 28); z-index:99999; display:flex; align-items:center; gap:14px;`;
+            notif.innerHTML = `<i class="fa-solid fa-crosshairs text-2xl"></i><div><div class="font-bold">\( {messages[type]}</div><div class="text-xs opacity-90"> \){currentMarket.name}</div></div>`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 2800);
+        }
+
+        function selectEO(type) {
+            document.getElementById('even-card').classList.toggle('border-violet-500', type === 'even');
+            document.getElementById('odd-card').classList.toggle('border-violet-500', type === 'odd');
+        }
+
+        function selectOU(type) {
+            document.getElementById('over-card').classList.toggle('border-amber-500', type === 'over');
+            document.getElementById('under-card').classList.toggle('border-amber-500', type === 'under');
+        }
+
+        window.onload = () => {
+            renderMarkets();
+            renderAllVols();
+            updatePredictions();
+            startSimulation();
+        };
+    </script>
+</body>
+</html>
